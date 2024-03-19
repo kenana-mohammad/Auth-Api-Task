@@ -39,8 +39,8 @@ class AuthControllerSanctum extends Controller
     public function login(LoginRequest $request){
       $credentials = $request->validated();
 
-          if( Auth::attempt($credentials)){
-            $user =Auth::user();
+if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
+                $user =Auth::user();
             $token=$user->createToken('MyApp')->plainTextToken;
             return response()->json([
                 'access_token' => $token,
@@ -48,11 +48,11 @@ class AuthControllerSanctum extends Controller
                 'user' =>$user
             ]);
 
+        }
+
              return response()->json([
                 'message' => 'Invalid login details'
             ], 401);
-        }
-
     }
 
     public function logout(){
